@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/css/css/styles.css">
+    <script src="static/css/scripts/scripts.js" defer></script>
+    <title>Team Details</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Team Details</h1>
+        <div id="team-details"></div>
+    </div>
+    
+    <script>
+        const teamId = "{{ team_id }}"; // Get team ID from Flask
+        fetch(`https://www.thesportsdb.com/api/v1/json/{{ THE_SPORTS_DB_API_KEY }}/lookupteam.php?id=${teamId}`)
+        //fetch(`https://www.thesportsdb.com/api/v1/json/3/lookupteam.php?id=${teamId}`)
+            .then(response => response.json())
+            .then(data => {
+                const team = data.teams[0];
+                const teamDetailsDiv = document.getElementById('team-details');
+                teamDetailsDiv.innerHTML = `
+                    <h2>${team.strTeam}</h2>
+                    <p>Sport: ${team.strSport}</p>
+                    <p>Country: ${team.strCountry}</p>
+                    <img src="${team.strTeamBadge}" alt="${team.strTeam} Badge" width="100">
+                    <p>Founded: ${team.intFormedYear}</p>
+                    <p>Stadium: ${team.strStadium}</p>
+                    <p>Website: <a href="${team.strWebsite}" target="_blank">${team.strWebsite}</a></p>
+                `;
+            })
+            .catch(error => console.error('Error:', error));
+    </script>
+</body>
+</html>
+
