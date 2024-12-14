@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/css/css/styles.css">
+    <script src="static/css/scripts/scripts.js" defer></script>
+    <title>Player Details</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Player Details</h1>
+        <div id="player-details"></div>
+    </div>
+
+    <script>
+        const playerId = "{{ player_id }}"; // Get player ID from Flask
+        fetch(`https://www.thesportsdb.com/api/v1/json/{{ THE_SPORTS_DB_API_KEY }}/lookupplayer.php?id=${playerId}`)
+        //fetch(`https://www.thesportsdb.com/api/v1/json/3/lookupplayer.php?id=${playerId}`)
+            .then(response => response.json())
+            .then(data => {
+                const player = data.players[0];
+                const playerDetailsDiv = document.getElementById('player-details');
+                playerDetailsDiv.innerHTML = `
+                    <h2>${player.strPlayer}</h2>
+                    <p>Position: ${player.strPosition}</p>
+                    <p>Team: ${player.strTeam}</p>
+                    <p>Nationality: ${player.strNationality}</p>
+                    <img src="${player.strThumb}" alt="${player.strPlayer} Thumbnail" width="100">
+                    <p>Height: ${player.strHeight}</p>
+                    <p>Weight: ${player.strWeight}</p>
+                `;
+            })
+            .catch(error => console.error('Error:', error));
+    </script>
+</body>
+</html>
